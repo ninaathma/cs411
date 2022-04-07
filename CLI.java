@@ -43,6 +43,7 @@ public class CLI {
     Scanner scanner = new Scanner(System.in);
     CLI cli = new CLI();
 
+    int test = 5;
     System.out.println(cli.commands[0]);
 
     while (true) {
