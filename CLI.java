@@ -38,27 +38,4 @@ public class CLI {
     switch (cmd) {
     }
   }
-
-  public static void main(String[] args) {
-    Scanner scanner = new Scanner(System.in);
-    CLI cli = new CLI();
-
-    System.out.println(cli.commands[0]);
-    System.out.println(cli.commands[0]);
-
-    while (true) {
-      int cmd = scanner.nextInt();
-      switch (cli.path) {
-        case 0: /* At main page */
-          cli.mainCmds(cmd);
-          break;
-        case 1:
-          cli.restaurantOwnerCommands(cmd);
-          break;
-        case 2: /* At User page; */
-          cli.userCommands(cmd);
-          break;
-      }
-    }
-  }
 }
