@@ -44,6 +44,7 @@ public class CLI {
     CLI cli = new CLI();
 
     System.out.println(cli.commands[0]);
+    System.out.println(cli.commands[0]);
 
     while (true) {
       int cmd = scanner.nextInt();
