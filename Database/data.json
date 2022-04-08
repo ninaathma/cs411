@@ -1,0 +1,28 @@
+[
+  {
+    "name": "restaurant 1",
+    "items": [
+      {
+        "name": "burger",
+        "price": 19.99
+      },
+      {
+        "name": "sandwitch",
+        "price": 19.99
+      }
+    ]
+  },
+  {
+    "name": "restaurant 2",
+    "items": [
+      {
+        "name": "deezna",
+        "price": 19.99
+      },
+      {
+        "name": "figma",
+        "price": 19.99
+      }
+    ]
+  }
+]
