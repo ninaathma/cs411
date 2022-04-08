@@ -3,6 +3,7 @@ import java.util.Scanner;
 import Database.Database;
 import Restaurants.Restaurant;
 import Users.RestaurantOwner;
+import Users.BasicUser;
 import Users.Client;
 
 public class CLI {
@@ -10,8 +11,7 @@ public class CLI {
   private int path = 0;
 
   // Either one should have a value if logged in
-  Client client;
-  RestaurantOwner restaurantOwner;
+  BasicUser user;
 
   // List of commands
   String[] commands = {
@@ -35,15 +35,13 @@ public class CLI {
 
         if(!signInIsRestaurantOwner){
           // If it is a client, authenticate
-          client = db.authenticateClient(signInUserName, signInPassword);
-          restaurantOwner = null;
+          user = db.authenticateClient(signInUserName, signInPassword);
         } else {
           // If it is a restaurant owner, authenticate
-          restaurantOwner = db.authenticateRestaurantOwner(signInUserName, signInPassword);
-          client = null;
+          user = db.authenticateRestaurantOwner(signInUserName, signInPassword);
         }
 
-        if(client == null && restaurantOwner == null) {
+        if(user == null) {
           System.out.println("Login details are incorrect, try again.");
         } else {
           // Print success message and navigate to correct path
@@ -62,7 +60,7 @@ public class CLI {
 
         if(!registerIsRestaurantOwner){
           Client newClient = new Client(registerUserName, registerPassword);
-          client = newClient;
+          user = newClient;
           path = 1;
         } else {
           // Get restaurants name
@@ -74,7 +72,7 @@ public class CLI {
 
           // Register
           RestaurantOwner newRestaurantOwner = new RestaurantOwner(registerUserName, registerPassword, restaurant);
-          restaurantOwner = newRestaurantOwner;
+          user = newRestaurantOwner;
           path = 2;
         }
 
