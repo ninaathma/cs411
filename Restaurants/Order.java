@@ -24,4 +24,8 @@ public class Order {
   public HashMap<Item, Integer> getItems() {
     return items;
   }
+
+  public void setStatus(OrderStatus _status) {
+    status = _status;
+  }
 }
