@@ -23,7 +23,7 @@ public class CLI {
     Scanner scanner = new Scanner(System.in);
     switch (cmd) {
       case 1:
-        Order order = new Order();
+        // Order order = new Order();
     }
   }
 
