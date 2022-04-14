@@ -23,11 +23,8 @@ public class Database {
 
   // ADD METHODS
   public boolean addClient(String userName, Client clientObject){
-    // Check if the user is already in the database
-    Client userExists = getClientByUserName(userName);
-
-    // if user is not, add user
-    if (userExists == null){
+    // if user is not in database, add user
+    if (!clientDatabase.containsKey(userName)){
       clientDatabase.put(userName, clientObject);
       return true;
     }
@@ -37,11 +34,8 @@ public class Database {
       }
   }
   public boolean addOwner(String userName, RestaurantOwner ownerObject){
-    // Check if the owner is already in the database
-    RestaurantOwner ownerExists = getRestaurantOwnerByName(userName);
-
-    // if owner is not, add owner
-    if (ownerExists == null){
+    // if owner is not in database, add owner
+    if (!ownerDatabase.containsKey(userName)){
       ownerDatabase.put(userName, ownerObject);
       return true;
     }
@@ -51,11 +45,8 @@ public class Database {
       }
   }  
   public boolean addRestaurant(String userName, Restaurant restaurantObject){
-    // Check if the restaurant is already in the database
-    Client userExists = getClientByUserName(userName);
-
-    // if rest is not, add it
-    if (userExists == null){
+  // if restaurant is not in the database, add it
+    if (!restaurantDatabase.containsKey(userName)){
       restaurantDatabase.put(userName, restaurantObject);
       return true;
     }
