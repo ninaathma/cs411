@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 import Database.Database;
+import Restaurants.Order;
 import Users.RestaurantOwner;
 import Users.Client;
 
@@ -23,7 +24,7 @@ public class CLI {
     Scanner scanner = new Scanner(System.in);
     switch (cmd) {
       case 1:
-        Order order = new Order();
+        // Order order = new Order(); 
     }
   }
 
