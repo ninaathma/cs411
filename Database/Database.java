@@ -11,71 +11,69 @@ public class Database {
   private HashMap<String, Restaurant> restaurantDatabase = new HashMap<>();
 
   // GET METHODS
-  public Client getClientByUserName (String userName) {
+  public Client getClientByUserName(String userName) {
     return clientDatabase.get(userName);
   }
-  public Restaurant getRestaurantByName (String restName) {
+
+  public Restaurant getRestaurantByName(String restName) {
     return restaurantDatabase.get(restName);
   }
-  public RestaurantOwner getRestaurantOwnerByName (String userName) {
+
+  public RestaurantOwner getRestaurantOwnerByName(String userName) {
     return ownerDatabase.get(userName);
   }
 
   // ADD METHODS
-  public boolean addClient(String userName, Client clientObject){
+  public boolean addClient(String userName, Client clientObject) {
     // if user is not in database, add user
-    if (!clientDatabase.containsKey(userName)){
+    if (!clientDatabase.containsKey(userName)) {
       clientDatabase.put(userName, clientObject);
       return true;
     }
     // otherwise, skip
-    else{
+    else {
       return false;
-      }
+    }
   }
-  public boolean addOwner(String userName, RestaurantOwner ownerObject){
+
+  public boolean addOwner(String userName, RestaurantOwner ownerObject) {
     // if owner is not in database, add owner
-    if (!ownerDatabase.containsKey(userName)){
+    if (!ownerDatabase.containsKey(userName)) {
       ownerDatabase.put(userName, ownerObject);
       return true;
     }
     // otherwise, skip
-    else{
-      return false;
-      }
-  }  
-  public boolean addRestaurant(String userName, Restaurant restaurantObject){
-  // if restaurant is not in the database, add it
-    if (!restaurantDatabase.containsKey(userName)){
+    return false;
+  }
+
+  public boolean addRestaurant(String userName, Restaurant restaurantObject) {
+    // if restaurant is not in the database, add it
+    if (!restaurantDatabase.containsKey(userName)) {
       restaurantDatabase.put(userName, restaurantObject);
       return true;
     }
     // otherwise, skip
-    else{
+    else {
       return false;
-      }
+    }
   }
 
-  //AUTH METHODS
-  public boolean authenticateClient(String userName, String password){
+  // AUTH METHODS
+  public Client authenticateClient(String userName, String password) {
     Client clientObject = getClientByUserName(userName);
 
-    if (clientObject.getUserName() == userName && clientObject.getPassword() == password){
-      return true;
+    if (clientObject.getUserName() == userName && clientObject.getPassword() == password) {
+      return clientObject;
     }
-    else{
-      return false;
-    }
+    return null;
   }
-  public boolean authenticateRestaurantOwner(String userName, String password){
+
+  public RestaurantOwner authenticateRestaurantOwner(String userName, String password) {
     RestaurantOwner ownerObject = getRestaurantOwnerByName(userName);
 
-    if (ownerObject.getUserName() == userName && ownerObject.getPassword() == password){
-      return true;
+    if (ownerObject.getUserName() == userName && ownerObject.getPassword() == password) {
+      return ownerObject;
     }
-    else{
-      return false;
-    }
+    return null;
   }
 }
-
