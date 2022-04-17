@@ -9,10 +9,4 @@ public class RestaurantOwner extends BasicUser {
     super(_userName, _password);
     restaurant = _restaurant;
   }
-  public String getUserName(){
-    return userName;
-  }
-  public String getPassword(){
-    return password;
-  }
 }
