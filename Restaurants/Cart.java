@@ -1,5 +1,6 @@
 package Restaurants;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -15,8 +16,17 @@ public class Cart {
     return restaurant;
   }
 
+  public HashMap<Item, Integer> getItems() {
+    return items;
+  }
+
   public void addItem(Item item) {
-    items.put(item, 1);
+    int quantity = 1;
+    if (items.containsKey(item)) {
+      quantity = items.get(item) + 1;
+    }
+
+    items.put(item, quantity);
   }
 
   public void removeItem(Item item) {
@@ -38,9 +48,30 @@ public class Cart {
       Item item = (Item) entry.getKey();
       int quantity = (int) entry.getValue();
       totalPrice += quantity * item.getPrice();
-      System.out.println(item.getName() + " " + item.getPrice());
     }
 
     return totalPrice;
+  }
+
+  public ArrayList<Item> displayItems() {
+    ArrayList<Item> orderedItems = new ArrayList<>();
+
+    for (Entry<Item, Integer> entry : items.entrySet()) {
+      Item item = (Item) entry.getKey();
+      int quantity = (int) entry.getValue();
+
+      int idx = orderedItems.size();
+      orderedItems.add(item);
+      System.out.println(idx + ". " + item.getName() + " (" + quantity + ")");
+    }
+    System.out.println();
+    return orderedItems;
+  }
+
+  public void editItem(Item item, int newQuantity) {
+    if (newQuantity > 0)
+      items.put(item, newQuantity);
+    else
+      removeItem(item);
   }
 }

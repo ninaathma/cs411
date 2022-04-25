@@ -1,30 +1,92 @@
 package Database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-
-import Restaurants.Restaurant;
 import Users.RestaurantOwner;
 import Users.Client;
+import Restaurants.Restaurant;
 
 public class Database {
-  private HashMap<String, RestaurantOwner> ownerDatabase;
-  private HashMap<String, Client> clientDatabase;
-  private HashMap<String, Restaurant> restaurantDatabase;
+  private HashMap<String, RestaurantOwner> ownerDatabase = new HashMap<>();
+  private HashMap<String, Client> clientDatabase = new HashMap<>();
+  private HashMap<String, Restaurant> restaurantDatabase = new HashMap<>();
 
-  public Restaurant getRestaurantByName(String restaurantName) {return null;}
+  // GET METHODS
+  public Client getClientByUserName(String userName) {
+    return clientDatabase.get(userName);
+  }
 
-  public Client getClientByUserName(String userName) {return null;}
+  public Restaurant getRestaurantByName(String restName) {
+    return restaurantDatabase.get(restName);
+  }
 
-  public RestaurantOwner getRestaurantOwnerByUserName(String userName) {return null;}
+  public RestaurantOwner getRestaurantOwnerByName(String userName) {
+    return ownerDatabase.get(userName);
+  }
 
-  public Client authenticateClient(String userName, String password) {return null;}
+  // ADD METHODS
+  public boolean addClient(String userName, Client clientObject) {
+    // if user is not in database, add user
+    if (!clientDatabase.containsKey(userName)) {
+      clientDatabase.put(userName, clientObject);
+      return true;
+    }
+    // otherwise, skip
+    else {
+      return false;
+    }
+  }
 
-  public RestaurantOwner authenticateRestaurantOwner(String userName, String password) {return null;}
+  public boolean addOwner(String userName, RestaurantOwner ownerObject) {
+    // if owner is not in database, add owner
+    if (!ownerDatabase.containsKey(userName)) {
+      ownerDatabase.put(userName, ownerObject);
+      return true;
+    }
+    // otherwise, skip
+    return false;
+  }
 
-  public void addClient(Client client) {}
+  public boolean addRestaurant(String restaurantName, Restaurant restaurantObject) {
+    // if restaurant is not in the database, add it
+    if (!restaurantDatabase.containsKey(restaurantName)) {
+      restaurantDatabase.put(restaurantName, restaurantObject);
+      return true;
+    }
+    // otherwise, skip
+    else {
+      return false;
+    }
+  }
 
-  public void addRestaurantOwner(RestaurantOwner restOwner) {}
+  // AUTH METHODS
+  public Client authenticateClient(String userName, String password) {
+    Client clientObject = getClientByUserName(userName);
 
-  public void addRestaurant(Restaurant rest) {}
+    if (clientObject != null && clientObject.getUserName().equals(userName)
+        && clientObject.getPassword().equals(password)) {
+      return clientObject;
+    }
+    return null;
+  }
 
+  public RestaurantOwner authenticateRestaurantOwner(String userName, String password) {
+    RestaurantOwner ownerObject = getRestaurantOwnerByName(userName);
+
+    if (ownerObject != null && ownerObject.getUserName().equals(userName)
+        && ownerObject.getPassword().equals(password)) {
+      return ownerObject;
+    }
+    return null;
+  }
+
+  public ArrayList<String> getAllRestaurantNames() {
+    ArrayList<String> result = new ArrayList<String>();
+
+    for (String key : restaurantDatabase.keySet()) {
+      result.add(key);
+    }
+
+    return result;
+  }
 }
