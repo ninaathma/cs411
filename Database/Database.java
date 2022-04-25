@@ -1,5 +1,6 @@
 package Database;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import Users.RestaurantOwner;
 import Users.Client;
@@ -46,10 +47,10 @@ public class Database {
     return false;
   }
 
-  public boolean addRestaurant(String userName, Restaurant restaurantObject) {
+  public boolean addRestaurant(String restaurantName, Restaurant restaurantObject) {
     // if restaurant is not in the database, add it
-    if (!restaurantDatabase.containsKey(userName)) {
-      restaurantDatabase.put(userName, restaurantObject);
+    if (!restaurantDatabase.containsKey(restaurantName)) {
+      restaurantDatabase.put(restaurantName, restaurantObject);
       return true;
     }
     // otherwise, skip
@@ -62,7 +63,8 @@ public class Database {
   public Client authenticateClient(String userName, String password) {
     Client clientObject = getClientByUserName(userName);
 
-    if (clientObject.getUserName() == userName && clientObject.getPassword() == password) {
+    if (clientObject != null && clientObject.getUserName().equals(userName)
+        && clientObject.getPassword().equals(password)) {
       return clientObject;
     }
     return null;
@@ -71,9 +73,20 @@ public class Database {
   public RestaurantOwner authenticateRestaurantOwner(String userName, String password) {
     RestaurantOwner ownerObject = getRestaurantOwnerByName(userName);
 
-    if (ownerObject.getUserName() == userName && ownerObject.getPassword() == password) {
+    if (ownerObject != null && ownerObject.getUserName().equals(userName)
+        && ownerObject.getPassword().equals(password)) {
       return ownerObject;
     }
     return null;
+  }
+
+  public ArrayList<String> getAllRestaurantNames() {
+    ArrayList<String> result = new ArrayList<String>();
+
+    for (String key : restaurantDatabase.keySet()) {
+      result.add(key);
+    }
+
+    return result;
   }
 }
