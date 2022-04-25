@@ -7,14 +7,21 @@ public class Order {
   private HashMap<Item, Integer> items;
   private double totalPrice;
 
-  public Order(HashMap<Item, Integer> _items, double _totalPrice) {
-    items = _items;
-    totalPrice = _totalPrice;
+  public Order(Cart cart) {
+    items = cart.getItems();
+    totalPrice = cart.getTotalPrice();
     status = OrderStatus.ORDERED;
   }
 
   public OrderStatus getStatus() {
-    return status;
+    OrderStatus currStatus = status;
+
+    if (status == OrderStatus.ORDERED)
+      status = OrderStatus.PREPARING;
+    else if (status == OrderStatus.PREPARING)
+      status = OrderStatus.READY;
+
+    return currStatus;
   }
 
   public double getTotalPrice() {
