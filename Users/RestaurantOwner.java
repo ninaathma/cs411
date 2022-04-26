@@ -9,4 +9,8 @@ public class RestaurantOwner extends BasicUser {
     super(_userName, _password);
     restaurant = _restaurant;
   }
+
+  public Restaurant getRestaurant(){
+    return restaurant;
+  }
 }

@@ -31,7 +31,7 @@ public class CLI {
   String[] commands = {
       "--- MAIN PAGE ---\n 1. Sign in\n 2. Register\n 3. Exit\n-----------------",
       "--- CLIENT PAGE ---\n 1. Show restaurants\n 2. Start a new order\n 3. Show items in cart\n 4. Add item to order\n 5. Edit item in order\n 6. Checkout & Pay\n 7. Check order status\n 8. Log out\n-------------------",
-      "--- RESTAURANT OWNER PAGE ---\n 1. Show restaurant menu\n 2. Add item to menu\n 3. Edit item in menu\n 4. Log out\n-----------------------------"
+      "--- RESTAURANT OWNER PAGE ---\n 1. Show restaurant menu\n 2. Add item to menu\n 3. Edit item in menu\n 4. Delete Item \n 5. Log out\n-----------------------------"
   };
 
   public static void printError(String err) {
@@ -208,7 +208,66 @@ public class CLI {
   }
 
   public void restaurantOwnerCommands(int cmd, Scanner scanner) {
+    RestaurantOwner owner = (RestaurantOwner) user;
+    Restaurant r = owner.getRestaurant();
     switch (cmd) {
+      case 1: 
+        /*Show Restaurant menu*/
+        r.displayMenu();
+
+        path = 2;
+        break;
+      case 2: 
+        /*Add item to menu */
+        System.out.println("Name of item to add: ");
+        String itemName = scanner.next();
+        System.out.println("Price of item: ");
+        double itemPrice = scanner.nextDouble();
+
+        Item i = new Item(itemName, itemPrice);
+        r.addNewItem(i);
+
+        r.displayMenu();
+        printSuccess("Item added!");
+
+        path = 2;
+        break;
+      case 3:
+        /*edit item in menu*/
+        r.displayMenu();
+        System.out.println("\nID of menu item to edit: ");
+        int id = scanner.nextInt();
+        
+        System.out.println("New name: ");
+        itemName = scanner.next();
+        System.out.println("New price: ");
+        itemPrice = scanner.nextInt();
+
+        Item newItem = new Item(itemName, itemPrice);
+        r.setItem(newItem, id);
+
+        r.displayMenu();
+        printSuccess("Item succesfully changed!");
+
+        path = 2;
+        break;
+      case 4: 
+      /*delete item*/
+      r.displayMenu();
+      System.out.println("\nID of menu item to delete: ");
+      id = scanner.nextInt();
+
+      r.deleteItem(id);
+
+      r.displayMenu();
+      printSuccess("Item sucessfully deleted!");
+      
+      path = 2;
+      break;
+      case 5:
+        /*Log out*/
+        logout();
+        break;
     }
   }
 
