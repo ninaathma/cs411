@@ -229,8 +229,6 @@ public class CLI {
 
         r.displayMenu();
         printSuccess("Item added!");
-
-        path = 2;
         break;
       case 3:
         /*edit item in menu*/
@@ -248,22 +246,18 @@ public class CLI {
 
         r.displayMenu();
         printSuccess("Item succesfully changed!");
-
-        path = 2;
         break;
       case 4: 
-      /*delete item*/
-      r.displayMenu();
-      System.out.println("\nID of menu item to delete: ");
-      id = scanner.nextInt();
+        /*delete item*/
+        r.displayMenu();
+        System.out.println("\nID of menu item to delete: ");
+        id = scanner.nextInt();
 
-      r.deleteItem(id);
+        r.deleteItem(id);
 
-      r.displayMenu();
-      printSuccess("Item sucessfully deleted!");
-      
-      path = 2;
-      break;
+        r.displayMenu();
+        printSuccess("Item sucessfully deleted!");
+        break;
       case 5:
         /*Log out*/
         logout();
