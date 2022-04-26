@@ -47,4 +47,12 @@ public class Restaurant {
   public int getNumOfOrders() {
     return orders.size();
   }
+
+  public void setItem(Item i, int itemIdx){
+      menu.set(itemIdx, i);
+  }
+
+  public void deleteItem(int itemIdx){
+      menu.remove(itemIdx);
+  }
 }
