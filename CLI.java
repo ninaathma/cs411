@@ -406,7 +406,7 @@ public class CLI {
       int cmd = scanner.nextInt();
       System.out.println();
       switch (cli.path) {
-        case 0: // run it back turbo
+        case 0: // run it back
           shouldExit = cli.mainCmds(cmd, scanner);
           break;
         case 1: // client
