@@ -11,6 +11,7 @@ import Restaurants.Restaurant;
 import Users.RestaurantOwner;
 import Users.BasicUser;
 import Users.Client;
+import Users.MallAdmin;
 
 public class CLI {
   Database db = new Database();
@@ -31,7 +32,8 @@ public class CLI {
   String[] commands = {
       "--- MAIN PAGE ---\n 1. Sign in\n 2. Register\n 3. Exit\n-----------------",
       "--- CLIENT PAGE ---\n 1. Show restaurants\n 2. Start a new order\n 3. Show items in cart\n 4. Add item to order\n 5. Edit item in order\n 6. Checkout & Pay\n 7. Check order status\n 8. Log out\n-------------------",
-      "--- RESTAURANT OWNER PAGE ---\n 1. Show restaurant menu\n 2. Add item to menu\n 3. Edit item in menu\n 4. Delete Item \n 5. Log out\n-----------------------------"
+      "--- RESTAURANT OWNER PAGE ---\n 1. Show restaurant menu\n 2. Add item to menu\n 3. Edit item in menu\n 4. Delete Item \n 5. Log out\n-----------------------------",
+      "--- ADMIN PAGE ---\n 1. Get restaurant sales and statistics\n 2. Log out\n-----------------------------"
   };
 
   public static void printError(String err) {
@@ -67,19 +69,31 @@ public class CLI {
         boolean signInIsRestaurantOwner = scanner.next().equals("y");
 
         if (!signInIsRestaurantOwner) {
-          // If it is a client, authenticate
-          user = db.authenticateClient(signInUserName, signInPassword);
+          System.out.print("Are you an admin? [y/n]: ");
+          boolean signInIsAdmin = scanner.next().equals("y");
+          if (!signInIsAdmin) {
+            // If it is a client, authenticate
+            user = db.authenticateClient(signInUserName, signInPassword);
+            path=1;
+          }
+          else {
+            // If it is an admin, authenticate
+            user = db.authenticateAdmin(signInUserName, signInPassword);
+            path=3;
+          }
         } else {
           // If it is a restaurant owner, authenticate
           user = db.authenticateRestaurantOwner(signInUserName, signInPassword);
+          path=2;
         }
 
         if (user == null) {
           printError("Login details are incorrect, try again.");
+          path=0;
+
         } else {
           // Print success message and navigate to correct path
           printSuccess("Successfully logged in as " + signInUserName);
-          path = signInIsRestaurantOwner ? 2 : 1;
         }
         break;
       case 2:
@@ -94,12 +108,24 @@ public class CLI {
         boolean success;
 
         if (!registerIsRestaurantOwner) {
-          Client newClient = new Client(registerUserName, registerPassword);
-          success = db.addClient(registerUserName, newClient);
-          user = newClient;
+          System.out.print("Are you an admin? [y/n]: ");
+          boolean registerIsAdmin = scanner.next().equals("y");
 
-          // Move to clients page
-          path = 1;
+          if(!registerIsAdmin) {
+            
+            Client newClient = new Client(registerUserName, registerPassword);
+            success = db.addClient(registerUserName, newClient);
+            user = newClient;
+            // Move to clients page
+            path = 1;
+
+          } else {
+            MallAdmin newAdmin = new MallAdmin(registerUserName, registerPassword);
+            success=db.addAdmin(registerUserName, newAdmin);
+            user=newAdmin;
+            // Move to admins page
+            path=3;
+          }
         } else {
           // Get restaurants name
           System.out.print("What is the name of your restaurant?: ");
@@ -132,6 +158,15 @@ public class CLI {
   }
 
   public void userCommands(int cmd, Scanner scanner) {
+    /* 
+    1. Show restaurants
+    2. Start a new order
+    3. Add item to order
+    5. Edit item in order
+    6. Checkout & pay
+    7. Check order status
+    8. Log out
+    */
     switch (cmd) {
       case 1:
         ArrayList<String> restaurantNames = db.getAllRestaurantNames();
@@ -204,10 +239,18 @@ public class CLI {
         break;
       case 8:
         logout();
+        break;
     }
   }
 
   public void restaurantOwnerCommands(int cmd, Scanner scanner) {
+    /*
+    1. Show restaurant menu
+    2. Add item to menu
+    3. Edit item in menu
+    4. Delete item
+    5. Log out
+    */
     RestaurantOwner owner = (RestaurantOwner) user;
     Restaurant r = owner.getRestaurant();
     switch (cmd) {
@@ -265,43 +308,90 @@ public class CLI {
     }
   }
 
+  public void mallAdminCommands(int cmd, Scanner scanner){
+    /*
+    1. Get sales statistics
+    2. Log out
+    */
+    
+    switch(cmd){
+      case 1:
+        
+        ArrayList<String> restaurantNames = db.getAllRestaurantNames();
+        printBold("Restaurant\tTotal Orders\t  Total Sales");
+        
+        for (int i=0; i<restaurantNames.size(); i++) {
+          String rName = restaurantNames.get(i);
+          Restaurant r = db.getRestaurantByName(rName);
+
+          System.out.println(rName + "\t\t" + r.getNumOfOrders() + "\t\t" + r.getTotalSales());
+
+        }
+
+
+        break;
+      case 2:
+        logout();
+        break;
+
+    }
+    
+
+  }
   public static void prepopulate(CLI cli) {
     /*
-     * PREPOPULATE OUR DATABASE WITH EXAMPLE RESTAURANTS
+     * PREPOPULATE OUR DATABASE WITH EXAMPLE USERS
      */
+
     Database db = cli.db;
-    String[][] userData = {
-        { "user1", "1234", "Basho Express" },
-        { "user2", "1234", "Open Kitchen" },
-        { "user3", "1234", "McDonalds" }
+
+    // Restaurant owners
+    String[][] restaurantOwners = {
+        { "owner1", "1234", "Basho Express" },
+        { "owner2", "1234", "Open Kitchen" },
+        { "owner3", "1234", "McDonalds" }
     };
 
-    String[][] itemNameData = {
+    String[][] menuItems = {
         { "Sushi Bowl", "Sushi Burrito", "Salad Bowl", "California Rolls" },
         { "3 Chicken Finger Basket", "Packards Corner Sandwich", "5 Finger Orange Ya Happy" },
         { "Happy Meal", "4 Piece Chicken McNuggets", "Big Mac", "Double Hamburger", "McDouble" }
     };
 
-    double[][] itemPriceData = {
+    double[][] menuPrices = {
         { 15.99, 8.49, 12.49, 13.29 },
         { 4.99, 12.90, 9.29 },
         { 6.99, 7.49, 7.49, 8.29, 11.55 },
     };
 
-    for (int i = 0; i < userData.length; i++) {
-      String[] uD = userData[i];
+    for (int i = 0; i < restaurantOwners.length; i++) {
+      String[] u = restaurantOwners[i];
 
-      Restaurant restaurant = new Restaurant(uD[2]);
-      RestaurantOwner newRestaurantOwner = new RestaurantOwner(uD[0], uD[1], restaurant);
-      db.addOwner(uD[0], newRestaurantOwner);
-      db.addRestaurant(uD[2], restaurant);
+      Restaurant restaurant = new Restaurant(u[2]);
+      RestaurantOwner newRestaurantOwner = new RestaurantOwner(u[0], u[1], restaurant);
+      db.addOwner(u[0], newRestaurantOwner);
+      db.addRestaurant(u[2], restaurant);
 
-      String[] itemNames = itemNameData[i];
-      double[] itemPrices = itemPriceData[i];
+      String[] itemNames = menuItems[i];
+      double[] itemPrices = menuPrices[i];
       for (int j = 0; j < itemNames.length; j++) {
         restaurant.addNewItem(itemNames[j], itemPrices[j]);
       }
     }
+
+    // Mall admins
+    String[][] mallAdmins = {
+      {"admin1", "1234"},
+      {"admin2", "1234"}
+    };
+
+    for (int i=0; i<mallAdmins.length; i++) {
+      String[] u = mallAdmins[i];
+      MallAdmin newAdmin = new MallAdmin(u[0], u[1]);
+      db.addAdmin(u[0], newAdmin);
+
+    }
+
   }
 
   public static void main(String[] args) {
@@ -316,16 +406,20 @@ public class CLI {
       int cmd = scanner.nextInt();
       System.out.println();
       switch (cli.path) {
-        case 0:
+        case 0: // run it back turbo
           shouldExit = cli.mainCmds(cmd, scanner);
           break;
-        case 1:
+        case 1: // client
           cli.userCommands(cmd, scanner);
           break;
-        case 2:
+        case 2: // owner
           cli.restaurantOwnerCommands(cmd, scanner);
           break;
+        case 3: // admin
+          cli.mallAdminCommands(cmd, scanner);
+          break;
       }
+
 
       System.out.println();
       System.out.println("------------------------------");
