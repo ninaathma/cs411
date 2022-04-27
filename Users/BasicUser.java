@@ -9,10 +9,11 @@ public class BasicUser {
     password = _password;
   }
 
-  public String getUserName(){
+  public String getUserName() {
     return userName;
   }
-  public String getPassword(){
+
+  public String getPassword() {
     return password;
   }
 }

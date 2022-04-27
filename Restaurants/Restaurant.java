@@ -8,11 +8,25 @@ public class Restaurant {
   private String name;
   private ArrayList<Item> menu;
   private Queue<Order> orders;
+  private boolean isClosed;
 
   public Restaurant(String _name) {
     name = _name;
     menu = new ArrayList<Item>();
     orders = new LinkedList<Order>();
+    isClosed = false;
+  }
+
+  public void closeRestaurant() {
+    isClosed = true;
+  }
+
+  public void openRestaurant() {
+    isClosed = false;
+  }
+
+  public boolean getIsClosed() {
+    return isClosed;
   }
 
   public String getRestaurantName() {
@@ -33,6 +47,7 @@ public class Restaurant {
   }
 
   public void displayMenu() {
+    System.out.println(name + " menu items:");
     for (int i = 0; i < menu.size(); i++) {
       Item item = menu.get(i);
       System.out.println(i + ". " + item.getName() + " - " + item.getPrice() + "$");
@@ -51,16 +66,16 @@ public class Restaurant {
   public double getTotalSales() {
     double total = 0;
     for (Order o : orders) {
-      total+=o.getTotalPrice();
+      total += o.getTotalPrice();
     }
     return total;
   }
 
-  public void setItem(Item i, int itemIdx){
-      menu.set(itemIdx, i);
+  public void setItem(Item i, int itemIdx) {
+    menu.set(itemIdx, i);
   }
 
-  public void deleteItem(int itemIdx){
-      menu.remove(itemIdx);
+  public void deleteItem(int itemIdx) {
+    menu.remove(itemIdx);
   }
 }

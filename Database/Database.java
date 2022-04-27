@@ -17,6 +17,7 @@ public class Database {
   public Client getClientByUserName(String userName) {
     return clientDatabase.get(userName);
   }
+
   public MallAdmin getAdminByUserName(String userName) {
     return adminDatabase.get(userName);
   }
@@ -41,6 +42,7 @@ public class Database {
       return false;
     }
   }
+
   public boolean addAdmin(String userName, MallAdmin adminObject) {
     // if user is not in database, add user
     if (!adminDatabase.containsKey(userName)) {
@@ -74,6 +76,7 @@ public class Database {
       return false;
     }
   }
+
   public ArrayList<String> getAllRestaurantNames() {
     ArrayList<String> result = new ArrayList<String>();
 
@@ -104,13 +107,13 @@ public class Database {
     }
     return null;
   }
-  
-  public MallAdmin authenticateAdmin(String userName, String password){
+
+  public MallAdmin authenticateAdmin(String userName, String password) {
     MallAdmin adminObject = getAdminByUserName(userName);
     if (adminObject != null && adminObject.getUserName().equals(userName)
         && adminObject.getPassword().equals(password)) {
       return adminObject;
-    } 
+    }
     return null;
 
   }

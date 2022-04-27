@@ -10,8 +10,7 @@ public class RestaurantOwner extends BasicUser {
     restaurant = _restaurant;
   }
 
-  public Restaurant getRestaurant(){
+  public Restaurant getRestaurant() {
     return restaurant;
-    
   }
 }
