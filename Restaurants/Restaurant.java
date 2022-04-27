@@ -48,6 +48,14 @@ public class Restaurant {
     return orders.size();
   }
 
+  public double getTotalSales() {
+    double total = 0;
+    for (Order o : orders) {
+      total+=o.getTotalPrice();
+    }
+    return total;
+  }
+
   public void setItem(Item i, int itemIdx){
       menu.set(itemIdx, i);
   }

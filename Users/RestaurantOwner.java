@@ -12,5 +12,6 @@ public class RestaurantOwner extends BasicUser {
 
   public Restaurant getRestaurant(){
     return restaurant;
+    
   }
 }

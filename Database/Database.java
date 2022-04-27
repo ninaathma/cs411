@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import Users.RestaurantOwner;
 import Users.Client;
+import Users.MallAdmin;
 import Restaurants.Restaurant;
 
 public class Database {
   private HashMap<String, RestaurantOwner> ownerDatabase = new HashMap<>();
   private HashMap<String, Client> clientDatabase = new HashMap<>();
   private HashMap<String, Restaurant> restaurantDatabase = new HashMap<>();
+  private HashMap<String, MallAdmin> adminDatabase = new HashMap<>();
 
   // GET METHODS
   public Client getClientByUserName(String userName) {
     return clientDatabase.get(userName);
+  }
+  public MallAdmin getAdminByUserName(String userName) {
+    return adminDatabase.get(userName);
   }
 
   public Restaurant getRestaurantByName(String restName) {
@@ -29,6 +34,17 @@ public class Database {
     // if user is not in database, add user
     if (!clientDatabase.containsKey(userName)) {
       clientDatabase.put(userName, clientObject);
+      return true;
+    }
+    // otherwise, skip
+    else {
+      return false;
+    }
+  }
+  public boolean addAdmin(String userName, MallAdmin adminObject) {
+    // if user is not in database, add user
+    if (!adminDatabase.containsKey(userName)) {
+      adminDatabase.put(userName, adminObject);
       return true;
     }
     // otherwise, skip
@@ -58,6 +74,15 @@ public class Database {
       return false;
     }
   }
+  public ArrayList<String> getAllRestaurantNames() {
+    ArrayList<String> result = new ArrayList<String>();
+
+    for (String key : restaurantDatabase.keySet()) {
+      result.add(key);
+    }
+
+    return result;
+  }
 
   // AUTH METHODS
   public Client authenticateClient(String userName, String password) {
@@ -79,14 +104,14 @@ public class Database {
     }
     return null;
   }
+  
+  public MallAdmin authenticateAdmin(String userName, String password){
+    MallAdmin adminObject = getAdminByUserName(userName);
+    if (adminObject != null && adminObject.getUserName().equals(userName)
+        && adminObject.getPassword().equals(password)) {
+      return adminObject;
+    } 
+    return null;
 
-  public ArrayList<String> getAllRestaurantNames() {
-    ArrayList<String> result = new ArrayList<String>();
-
-    for (String key : restaurantDatabase.keySet()) {
-      result.add(key);
-    }
-
-    return result;
   }
 }
